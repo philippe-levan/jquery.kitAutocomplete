@@ -1,6 +1,14 @@
 kitAutocomplete : an autocomplete jQuery plugin (without jquery ui)
+===================================================================
 
-        ---------------------------------------
+Features
+========
+- a standard autocomplete (google suggest like)
+- doesn't need to use jQuery UI
+- very customisable, with custom preventable events
+- values in the menu can have differents css class
+- we can receive a lot of values with the line
+selected (an id, a description, a reference,...)
 
 LICENSE
 =======
