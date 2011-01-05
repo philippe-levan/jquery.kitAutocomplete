@@ -100,6 +100,11 @@ ul.kit-autocomplete-menu li a:hover {
 * Javascript code
 *****************************
 <script>
+// minimal javascript :
+$("#myAutocomplete").kitAutocomplete({
+    source: "myAjax.php",
+});
+// all the options with default values (no default value for source, mandatory)
 $("#myAutocomplete").kitAutocomplete({
     source: "myAjax.php", // url of the remote data (POST)
     delay: 300, // delay in ms after a keystroke to activate itself
