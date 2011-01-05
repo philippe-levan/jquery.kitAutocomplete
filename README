@@ -1,0 +1,124 @@
+kitAutocomplete : an autocomplete jQuery plugin (without jquery ui)
+
+        ---------------------------------------
+
+LICENSE
+=======
+BSD (see in this directory)
+
+AUTHOR
+======
+Philippe Le Van, Kitpages, http://www.kitpages.fr
+twitter : plv
+
+History
+=================
+05/01/2011 : 1.0 (first release)
+
+Requirements
+============
+Tested with jQuery 1.4.4
+
+Compatibility
+=============
+Tested on IE6-9, FF 3.5. It should be ok with the other browsers
+
+Known bugs
+==========
+none for the moment
+
+To be added in future versions
+==============================
+* A keyboard navigation inside the menu
+
+======================================================
+User's Guide
+======================================================
+Here is a small example.
+
+You can see a functional example in the example/ directory
+
+*****************************
+* CSS code
+*****************************
+<style>
+.kit-autocomplete {
+    position: relative;
+    height: 20px;
+}
+
+.kit-autocomplete input {
+    width: 200px;
+    height: 20px;
+}
+ul.kit-autocomplete-menu {
+    border: 1px solid #DDDDDD;
+    position: absolute;
+    top: 20px;
+    left: 0px;
+    width: 200px;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    max-height: 80px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+ul.kit-autocomplete-menu li a {
+    display: block;
+    width: 200px;
+    background-color: #FFFFFF;
+}
+
+ul.kit-autocomplete-menu li.disabled a {
+    font-style: italic;
+}
+
+ul.kit-autocomplete-menu li a:hover {
+    background-color: #DDDDDD;
+}
+</style>
+
+*****************************
+* HTML code
+*****************************
+<div id="myAutocomplete" class="kit-autocomplete">
+    <input name="toto"/>
+    <ul class="kit-autocomplete-menu"></ul>
+</div>
+
+*****************************
+* Javascript code
+*****************************
+<script>
+$("#myAutocomplete").kitAutocomplete({
+    source: "myAjax.php", // url of the remote data (POST)
+    delay: 300, // delay in ms after a keystroke to activate itself
+    field: 'value', // field to display in the line
+    cssField: 'className', // field to use to set a class to the li in the menu
+    item: null, // line selected and displayed by default
+    search: searchCallback, // before remote call
+    open: openCallback, // before menu opens
+    focus: focusCallback, // before highlight change
+    select: selectCallback, // before item selection
+    close: closeCallback, // when the list is closed (selected or canceled)
+    change: changeCallback // after an item was selected and line value changed
+});
+</script>
+
+*****************************
+* PHP code
+*****************************
+<?php
+$autocompleteSearch = $_POST["term"];
+$tab = array(
+    array("id"=>12, "value"=>"France", "extra"=> "tititatat"),
+    array("id"=>15, "value"=>"Angleterre", "extra" => "tutu"),
+    ...
+);
+
+$filteredTab = filter_data_with_search_value($tab, $search);
+
+echo json_encode($filteredTab);
+?>
