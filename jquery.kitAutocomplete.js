@@ -3,26 +3,28 @@
  * Copyright (c) 2011, Philippe Le Van, Kitpages, http://www.kitpages.fr
  */
 (function( $ ){
-    var settings = {
-        delay: 300, // delay in ms after a keystroke to activate itself
-        item: null, // item selected and displayed at initialization
-        field: 'value', // field to display in the line
-        cssField: 'className', // field to use to set a class to the li in the menu
-        
-        // events
-        search: null, // before remote call
-        open: null, // before menu opens
-        focus : null, // before highlight change
-        select: null, // before item selection
-        close: null, // when the list is closed (selected or canceled)
-        change: null // after an item was selected and line value changed
-    };
     
     var WidgetAutocomplete = (function() {
         // constructor
-        function WidgetAutocomplete(boundingBox, settings) {
+        function WidgetAutocomplete(boundingBox, options) {
+            this._settings = {
+                delay: 300, // delay in ms after a keystroke to activate itself
+                item: null, // item selected and displayed at initialization
+                field: 'value', // field to display in the line
+                cssField: 'className', // field to use to set a class to the li in the menu
+
+                // events
+                search: null, // before remote call
+                open: null, // before menu opens
+                focus : null, // before highlight change
+                select: null, // before item selection
+                close: null, // when the list is closed (selected or canceled)
+                change: null // after an item was selected and line value changed
+            };
             // settings
-            this._settings = settings;
+            if (options) {
+                $.extend(this._settings, options);
+            }
             
             // DOM Nodes
             this._boundingBox = boundingBox;
@@ -279,12 +281,9 @@
          */
         init : function ( options ) {
             var self = $(this);
-            if (options) {
-                $.extend ( settings, options );
-            }
             // chainability => foreach
             return this.each(function() {
-                var widget = new WidgetAutocomplete($(this), settings);
+                var widget = new WidgetAutocomplete($(this), options);
             });
         },
         

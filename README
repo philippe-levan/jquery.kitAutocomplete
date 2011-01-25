@@ -7,8 +7,7 @@ Features
 - doesn't need to use jQuery UI
 - very customisable, with custom preventable events
 - values in the menu can have differents css class
-- we can receive a lot of values with the line
-selected (an id, a description, a reference,...)
+- we can receive a lot of values with the line selected (an id, a description, a reference,...)
 
 LICENSE
 =======
@@ -19,9 +18,15 @@ AUTHOR
 Philippe Le Van, Kitpages, http://www.kitpages.fr
 twitter : plv
 
-History
+History - versions
 =================
-05/01/2011 : 1.0 (first release)
+05/01/2011 : 1.0
+- first release
+
+25/01/2011 : 1.1
+- correction #1: some settings where shared between instances of the widget.
+this is solved, you can safely use several instances of the autocomplete on the
+same page.
 
 Requirements
 ============
