@@ -3,7 +3,7 @@
  * Copyright (c) 2011, Philippe Le Van, Kitpages, http://www.kitpages.fr
  */
 (function( $ ){
-    
+
     var WidgetAutocomplete = (function() {
         // constructor
         function WidgetAutocomplete(boundingBox, options) {
@@ -25,20 +25,20 @@
             if (options) {
                 $.extend(this._settings, options);
             }
-            
+
             // DOM Nodes
             this._boundingBox = boundingBox;
             this._input = this._boundingBox.find("input");
             this._ul = this._boundingBox.find("ul");
             this._ul.kitAutocompleteTobody();
-            
+
             // memory
             this._boundingBox.data( "kitAutocomplete", this );
             this._input.data( "kitAutocomplete", this );
-            
+
             this.init();
         };
-        
+
         // methods
         WidgetAutocomplete.prototype = {
             init: function() {
@@ -53,28 +53,28 @@
                 self._itemList = [];
                 self._isMenuOpen = false;
                 self._render();
-                
+
                 var eventList = ['search', 'open', 'render', 'focus', 'select', 'unselect', 'close', 'change'];
                 // init custom events according to settings callback values
                 for (var i = 0 ; i < eventList.length ; i++ ) {
                     if (this._settings[eventList[i]]) {
-                        this._boundingBox.bind(eventList[i]+"_kitAutocomplete", this._settings[eventList[i]]);
+                        this._boundingBox.bind(eventList[i]+"_kitAutocomplete", {self:self}, this._settings[eventList[i]]);
                     }
                 }
-                
+
                 // init custom events according to settings callback values
                 for (var i = 0 ; i < eventList.length ; i++ ) {
                     var callbackName = "_"+eventList[i]+"Callback";
-                    this._boundingBox.bind(eventList[i]+"_kitAutocomplete", this[callbackName]);
+                    this._boundingBox.bind(eventList[i]+"_kitAutocomplete", {self:self}, this[callbackName]);
                 }
-                
+
                 // register events
                 this._input.bind("keydown.autocomplete", this.keydownCallback);
-                
+
                 this._input.bind( "blur.autocomplete", this.blurCallback);
             },
-            
-            
+
+
             ////
             // callbacks
             ////
@@ -101,7 +101,7 @@
                     }
                 }, self._settings.delay );
             },
-            
+
             blurCallback: function( event ) {
                 var self = $(this).data("kitAutocomplete");
                 clearTimeout( self.searching );
@@ -111,21 +111,21 @@
                 }, 300 );
             },
 
-            
+
             remoteCallback: function (data) {
                 ////console.log.log("remote callback, line count="+data.length);
                 var self = this;
                 self._itemList = data;
                 self.open();
             },
-            
+
             _menuClickCallback: function(event, clickedElement) {
                 var self = this;
                 var a = $(clickedElement);
                 var item = a.data("kitAutocomplete");
                 self._boundingBox.trigger("select_kitAutocomplete", [{item: item}]);
             },
-            
+
             _searchCallback: function(event, data) {
                 if (event.isDefaultPrevented()) {
                     return;
@@ -173,16 +173,20 @@
                 self._lastSearch = self._item[self._settings.field];
                 self._itemList = [];
                 self.close();
+                self._boundingBox.trigger("change_kitAutocomplete", [
+                    self._item,
+                    self._lastSearch
+                ]);
             },
             _unselectCallback: function(event) {
                 if (event.isDefaultPrevented()) {
                     return;
-                }                
+                }
                 //console.log("select event callback");
                 var self = $(this).data("kitAutocomplete");
                 self._item = null;
             },
-            
+
             _closeCallback: function(event) {
                 if (event.isDefaultPrevented()) {
                     return;
@@ -195,7 +199,7 @@
                 }
                 self.render();
             },
-            
+
             _changeCallback: function(event, data) {
                 if (event.isDefaultPrevented()) {
                     return;
@@ -230,13 +234,13 @@
                             self._menuClickCallback(event, this);
                         });
                         a.data("kitAutocomplete", item);
-                        
+
                         // create li
                         var li = $('<li></li>');
                         if (item.className) {
                             li.addClass(item.className);
                         }
-                        
+
                         // add a and li to ul
                         li.append(a);
                         self._ul.append(li);
@@ -273,7 +277,7 @@
         };
         return WidgetAutocomplete;
     })();
-    
+
     var methods = {
         /**
          * add events to a dl instance
@@ -286,7 +290,7 @@
                 var widget = new WidgetAutocomplete($(this), options);
             });
         },
-        
+
         close: function() {
             return this.each(function() {
                 var widget = $(this).data("kitAutocomplete");
@@ -323,9 +327,9 @@
          */
         destroy : function( ) {
         }
-        
+
     };
-    
+
     $.fn.kitAutocomplete = function( method ) {
         if ( methods[method] ) {
             return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
@@ -373,7 +377,7 @@
                 'z-index': 400000,
                 'top': offset.top,
                 'left': offset.left
-            });            
+            });
         },
         fromBody: function() {
             var ul = $(this);
@@ -391,7 +395,7 @@
             ul.data("kitAutocompleteTobody", "standard");
         }
     };
-    
+
     $.fn.kitAutocompleteTobody = function(method) {
         if ( methods[method] ) {
             return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
